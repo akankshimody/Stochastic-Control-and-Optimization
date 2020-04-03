@@ -1,0 +1,135 @@
+---
+title: "HW4_am92786"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Problem 1
+```{r}
+func1 <- function(k){ 
+  machines= 0.05 * (((100000-(15*k))/12)^(2/3)) * (k^(1/3))
+  return(-machines)
+}
+S=optim(100,func1,method="CG")
+S$par
+S$value
+```
+
+Thus, the maximum number of machines that can be produced = 102
+
+
+Problem 2
+```{r}
+library(matrixStats)
+library(quadprog)
+stocks = read.csv("homework4stocks.csv", header = TRUE)
+tempdf = data.matrix(stocks[c(2:ncol(stocks))])
+#colMeans(tempdf)
+#colVars(tempdf)
+#cor(tempdf, method = 'pearson')
+```
+
+
+```{r}
+m=colMeans(tempdf)
+s=colSds(tempdf)
+
+rho=cor(data.matrix(stocks[c(2:ncol(stocks))]), method = 'pearson')
+
+covMat=diag(s) %*% rho %*% diag(s)
+
+RVal=0.01
+Dmat=2*covMat
+dvec=rep(0,ncol(stocks)-1)
+Amat=matrix(c(rep(1,27),rep(-1,27),m,-m),27)
+bvec=c(1,-1,0.01,-0.01)
+  
+#no shorting
+Amat=cbind(Amat,diag(27))
+bvec=c(bvec,rep(0,27))
+  
+S=solve.QP(Dmat,dvec,Amat,bvec)
+cat("The fraction to be invested in each company: ",S$solution,"\n")
+new_portfolio = S$solution
+cat("Estimated mean of portfolio: ",mean(new_portfolio),"\n")
+cat("Estimated variance of portfolio: ",var(new_portfolio),"\n")
+cat("Estimated standard deviation of portfolio: ",sd(new_portfolio),"\n")
+
+```
+
+Problem 3
+```{r}
+var_selection = read.csv("variable_selection.csv", header = TRUE, sep =",")
+model1 = lm(y~x1, data = var_selection)
+summary(model1)
+```
+```{r}
+model2 = lm(y~x2, data = var_selection)
+summary(model2)
+```
+```{r}
+model3 = lm(y~x3, data = var_selection)
+summary(model3)
+```
+```{r}
+model4 = lm(y~x1+x2, data = var_selection)
+summary(model4)
+```
+```{r}
+model5 = lm(y~x1+x3, data = var_selection)
+summary(model5)
+```
+```{r}
+model6 = lm(y~x2+x3, data = var_selection)
+summary(model6)
+```
+
+From the above models we see model4 (y~x1+x2) performs best with highest Adjusted R-squared and least error.
+
+Problem 4
+```{r}
+library(quadprog)
+
+Dmat=2*matrix(c(1,0,0,0,0,
+                0,4,0,0,0,
+                0,0,6,0,0,
+                0,0,0,12,0,
+                0,0,0,0,3),5,5)
+dvec=rep(0,5)
+Amat=matrix(c(1,1,0,0,0,
+              -1,-1,0,0,0,
+              0,0,0,1,1,
+              0,0,0,-1,-1,
+              1,0,-1,-1,0,
+              -1,0,1,1,0,
+              0,1,1,0,-1,
+              0,-1,-1,0,1),5,8)
+bvec=c(710,-710,710,-710,0,0,0,0)
+
+
+S=solve.QP(Dmat,dvec,Amat,bvec)
+cat("Current flowing through each resistor: ",S$solution)
+
+```
+
+Problem 5
+```{r}
+nfl = read.csv("nflratings.csv", header = FALSE, sep = ',')
+nfl$ActualPointSpread = nfl$V4-nfl$V5
+func5 <- function(ratings){
+  nfl$predicted_spread = ratings[nfl$V2]-ratings[nfl$V3] + ratings[33]
+  prediction_error = sum((nfl$ActualPointSpread-nfl$predicted_spread)^2)
+  return (prediction_error)
+}
+
+random_start = c(rep(85,32),3)
+S=optim(random_start,func5,method="CG")
+
+cat("Ratings are: ", S$par[1:32],"\n")
+cat("Home advantage: ",S$par[33],"\n")
+```
+
+

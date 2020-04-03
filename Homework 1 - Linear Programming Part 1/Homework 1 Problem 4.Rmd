@@ -1,0 +1,58 @@
+---
+title: "Problem 4"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Part A
+```{r}
+#Creating a nxn matrix of zeroes
+n<-20
+A <- matrix(0, nrow = n, ncol = n)
+#A
+```
+
+```{r}
+for (i in 1:n){
+  for (j in 1:n){
+    if(i<=j) A[i,j] = i/j
+    else A[i,j] = j/i
+  }
+}
+#A
+```
+
+Part B
+```{r}
+isSymmetric(A)
+```
+
+Part C
+```{r}
+#Checking if determinant !=0
+cat("Is Determinant!=0 ?",det(A)!=0,"\n")
+#C is inverse of A
+C <- solve(A)
+#Creating an nxn identity matrix 
+I <- diag(n)
+#Checking if the inverse is correct
+cat("Is Inverse correct?", all.equal(C%*%A,I))
+```
+
+Part D
+```{r}
+d <- c((1:10),(10:1))
+d
+```
+
+Part E
+```{r}
+#Ax = Cd
+solve(A,C%*%d)
+```
+
