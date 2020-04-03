@@ -9,7 +9,7 @@ similarity metrics rho(ij). Next, we will construct a portfolio by selecting app
 and finally evaluate how well our index fund does as compared to the NASDAQ-100 index.
 
 ### Problem Statement
-The Problem statement formulated by Dr. Kumar Muthuraman can be found [here](https://github.com/akankshimody/Stochastic-Control-and-Optimization/blob/master/Group%20Project%202%20-%20Integer%20Programming/Project%202%20-%20Integer%20Programming%20Problem%20Statement.pdf)
+The Problem statement provided by Dr. Kumar Muthuraman can be found [here](https://github.com/akankshimody/Stochastic-Control-and-Optimization/blob/master/Group%20Project%202%20-%20Integer%20Programming/Project%202%20-%20Integer%20Programming%20Problem%20Statement.pdf)
 
-### Conclusion
+### Analysis
 Our report including our code can be found [here](https://github.com/akankshimody/Stochastic-Control-and-Optimization/blob/master/Group%20Project%202%20-%20Integer%20Programming/Project%202%20Report.pdf)
